@@ -1,4 +1,19 @@
 services:
+  migrations:
+    build:
+      context: .
+      dockerfile: infra/prod/docker/Dockerfile
+    image: skillsherpa-full-stack-take-home-test:latest
+    command:
+      - bash
+      - -c
+      - chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh && /var/www/infra/prod/docker/db-migrations.sh
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env.docker
+
   app:
     build:
       context: .
@@ -14,8 +29,10 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      migrations:
+        condition: service_started
     env_file:
-      - .env
+      - .env.docker
 
   db:
     image: postgres:16

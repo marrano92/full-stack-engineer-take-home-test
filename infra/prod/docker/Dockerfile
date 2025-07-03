@@ -75,9 +75,6 @@ RUN \
     chmod -R 775 /var/www/bootstrap/cache && \
     php artisan storage:link
 
-# Copy the vite manifest from /var/www/public/build/.vite to /var/www/public/build/
-RUN cp /var/www/public/build/.vite/manifest.json /var/www/public/build/
-
 # Fix the prod entrypoint permissions
 RUN chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh
 RUN chmod +x /var/www/infra/prod/docker/db-migrations.sh
