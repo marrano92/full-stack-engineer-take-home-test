@@ -22,3 +22,14 @@ export interface User {
     created_at: string;
     updated_at: string;
 }
+
+export interface NavItem {
+    title: string;
+    href: string;
+    icon: LucideIcon;
+}
+
+export interface BreadcrumbItem {
+    title: string;
+    href?: string;
+}

@@ -24,11 +24,9 @@ defineProps<Props>();
     </DropdownMenuLabel>
     <DropdownMenuSeparator />
     <DropdownMenuGroup>
-        <DropdownMenuItem :as-child="true">
-            <Link class="block w-full" :href="route('profile.edit')" prefetch as="button">
-                <Settings class="mr-2 h-4 w-4" />
-                Settings
-            </Link>
+        <DropdownMenuItem disabled>
+            <Settings class="mr-2 h-4 w-4" />
+            Settings (Coming Soon)
         </DropdownMenuItem>
     </DropdownMenuGroup>
     <DropdownMenuSeparator />

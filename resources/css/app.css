@@ -56,6 +56,9 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+    --color-label: var(--label);
+    --color-input-bg: var(--input-bg);
+    --color-input-border: var(--input-border);
 }
 
 /*
@@ -85,7 +88,7 @@
 }
 
 :root {
-    --background: hsl(0 0% 100%);
+    --background: hsl(229 60% 98%);
     --foreground: hsl(0 0% 3.9%);
     --card: hsl(0 0% 100%);
     --card-foreground: hsl(0 0% 3.9%);
@@ -93,8 +96,8 @@
     --popover-foreground: hsl(0 0% 3.9%);
     --primary: hsl(0 0% 9%);
     --primary-foreground: hsl(0 0% 98%);
-    --secondary: hsl(0 0% 92.1%);
-    --secondary-foreground: hsl(0 0% 9%);
+    --secondary: hsl(225 74% 17%);
+    --secondary-foreground: hsl(0 0% 98%);
     --muted: hsl(0 0% 96.1%);
     --muted-foreground: hsl(0 0% 45.1%);
     --accent: hsl(0 0% 96.1%);
@@ -119,6 +122,9 @@
     --sidebar-border: hsl(0 0% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
+    --label: hsl(225, 9%, 45%);
+    --input-bg: hsl(240 50% 98%);
+    --input-border: hsl(230 20% 87%);
 }
 
 .dark {
@@ -130,7 +136,7 @@
     --popover-foreground: 0 0% 98%;
     --primary: hsl(0 0% 98%);
     --primary-foreground: hsl(0 0% 9%);
-    --secondary: hsl(0 0% 14.9%);
+    --secondary: hsl(225 74% 17%);
     --secondary-foreground: hsl(0 0% 98%);
     --muted: hsl(0 0% 16.08%);
     --muted-foreground: hsl(0 0% 63.9%);
@@ -155,6 +161,9 @@
     --sidebar-border: hsl(0 0% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(240 5.9% 10%);
+    --label: hsl(225 15% 63%);
+    --input-bg: hsl(240 50% 98%);
+    --input-border: hsl(230 20% 87%);
 }
 
 @layer base {
