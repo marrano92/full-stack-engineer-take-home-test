@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Asset extends Model
 {
@@ -12,7 +13,11 @@ class Asset extends Model
      * @var list<string>
      */
     protected $fillable = [
-        // ... todo ...
+        'refence',
+        'serial_number',
+        'description',
+        'current_owner_id',
+        'current_owned_from'
     ];
 
     /**
@@ -22,8 +27,11 @@ class Asset extends Model
      */
     protected function casts(): array
     {
-        return [
-            // ... todo ...
-        ];
+        return [];
+    }
+
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(Owner::class, 'current_owner_id');
     }
 }

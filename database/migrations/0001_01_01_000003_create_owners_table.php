@@ -11,9 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('assets', function (Blueprint $table) {
+        Schema::create('owners', function (Blueprint $table) {
             $table->id();
-            // ... fields ...
+			$table->string('first_name', 255);
+			$table->string('last_name', 255);
+            $table->timestamps();
+			$table->softDeletes();
+
+			$table->index('last_name');
+			$table->index(['first_name','last_name']);
+	        $table->unique(['first_name', 'last_name']);
         });
     }
 
@@ -22,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Todo
+        Schema::dropIfExists('owners');
     }
 };
