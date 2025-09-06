@@ -15,6 +15,11 @@ class AssetOwnerAssignment extends Model
         'owned_to'
     ];
 
+    protected $casts = [
+        'owned_from' => 'datetime',
+        'owned_to' => 'datetime',
+    ];
+
     public function asset(): BelongsTo
     {
         return $this->belongsTo(Asset::class, 'asset_id');

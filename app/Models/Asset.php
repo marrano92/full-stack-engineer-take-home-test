@@ -2,18 +2,23 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Asset extends Model
 {
+
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'refence',
+        'reference',
         'serial_number',
         'description',
         'current_owner_id',
@@ -27,11 +32,18 @@ class Asset extends Model
      */
     protected function casts(): array
     {
-        return [];
+        return [
+            'current_owned_from' => 'datetime',
+        ];
     }
 
     public function owner(): BelongsTo
     {
         return $this->belongsTo(Owner::class, 'current_owner_id');
+    }
+
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(AssetOwnerAssignment::class);
     }
 }

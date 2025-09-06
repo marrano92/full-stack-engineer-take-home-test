@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Owner extends Model
 {
-    use softDeletes;
+    use SoftDeletes;
 
     /** @use HasFactory<OwnerFactory> */
     use HasFactory;
@@ -23,5 +23,10 @@ class Owner extends Model
     public function assets(): HasMany
     {
         return $this->hasMany(Asset::class, 'current_owner_id');
+    }
+    
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(AssetOwnerAssignment::class);
     }
 }

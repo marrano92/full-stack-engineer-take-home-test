@@ -13,12 +13,12 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])
-    ->group(function () {
-        Route::get('/dashboard', function () {
-            return to_route('assets.index');
-        })->name('dashboard');
+     ->group(function () {
+         Route::get('/dashboard', function () {
+             return to_route('assets.index');
+         })->name('dashboard');
 
-        Route::get('/assets', [AssetsController::class, 'index'])->name('assets.index');
-        Route::get('/assets/add', [AssetsController::class, 'add'])->name('assets.add');
-        Route::get('/assets/{asset}/edit', [AssetsController::class, 'edit'])->name('assets.edit');
-    });
+         Route::get('/assets', [AssetsController::class, 'index'])->name('assets.index');
+         Route::get('/assets/add', [AssetsController::class, 'pageNew'])->name('assets.add');
+         Route::get('/assets/{asset}/edit', [AssetsController::class, 'pageEdit'])->name('assets.edit');
+     });
