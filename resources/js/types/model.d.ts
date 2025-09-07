@@ -52,4 +52,10 @@ export interface EditAssetProps {
 export interface Pagination<T> {
     data: T[];
     links: PaginationLink[];
+    current_page: number;
+    from: number;
+    to: number;
+    total: number;
+    per_page: number;
+    last_page: number;
 }

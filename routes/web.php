@@ -20,5 +20,8 @@ Route::middleware(['auth'])
 
          Route::get('/assets', [AssetController::class, 'index'])->name('assets.index');
          Route::get('/assets/add', [AssetController::class, 'pageNew'])->name('assets.create');
+         Route::post('/assets', [AssetController::class, 'store'])->name('assets.store');
          Route::get('/assets/{asset}/edit', [AssetController::class, 'pageEdit'])->name('assets.edit');
+         Route::put('/assets/{asset}', [AssetController::class, 'update'])->name('assets.update');
+         Route::delete('/assets/{asset}', [AssetController::class, 'destroy'])->name('assets.destroy');
      });

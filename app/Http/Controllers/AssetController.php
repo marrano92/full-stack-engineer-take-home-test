@@ -16,7 +16,7 @@ class AssetController extends Controller
 {
     public function index(): Response
     {
-        $assets = Asset::with('owner')->latest()->paginate(15);
+        $assets = Asset::with('owner')->latest()->paginate(10);
 
         return Inertia::render('Assets/Index', [
             'assets' => $assets
@@ -82,5 +82,12 @@ class AssetController extends Controller
             'owners'  => $owners,
             'history' => $history,
         ]);
+    }
+
+    public function destroy(Asset $asset): RedirectResponse
+    {
+        $asset->delete();
+
+        return redirect()->route('assets.index')->with('success', 'Asset eliminato con successo');
     }
 }
