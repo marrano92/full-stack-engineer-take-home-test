@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AssetsController;
+use App\Http\Controllers\AssetController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,7 +18,7 @@ Route::middleware(['auth'])
              return to_route('assets.index');
          })->name('dashboard');
 
-         Route::get('/assets', [AssetsController::class, 'index'])->name('assets.index');
-         Route::get('/assets/add', [AssetsController::class, 'pageNew'])->name('assets.add');
-         Route::get('/assets/{asset}/edit', [AssetsController::class, 'pageEdit'])->name('assets.edit');
+         Route::get('/assets', [AssetController::class, 'index'])->name('assets.index');
+         Route::get('/assets/add', [AssetController::class, 'pageNew'])->name('assets.create');
+         Route::get('/assets/{asset}/edit', [AssetController::class, 'pageEdit'])->name('assets.edit');
      });

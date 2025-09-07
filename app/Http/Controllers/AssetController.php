@@ -12,7 +12,7 @@ use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Inertia\Response;
 
-class AssetsController extends Controller
+class AssetController extends Controller
 {
     public function index(): Response
     {
@@ -66,7 +66,7 @@ class AssetsController extends Controller
     {
         $owners = Owner::orderBy('last_name')->limit(200)->get(['id', 'first_name', 'last_name']);
 
-        return Inertia::render('Assets/Add', [
+        return Inertia::render('Assets/Create', [
             'owners' => $owners
         ]);
     }
