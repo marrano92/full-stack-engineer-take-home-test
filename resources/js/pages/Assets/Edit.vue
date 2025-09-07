@@ -24,14 +24,13 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
-                            <label for="owner_id" class="block text-sm font-medium">Current Owner</label>
-                            <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
-                                <option :value="null">— Any owner —</option>
-                                <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
-                                    {{ getOwnerFullName(owner) }}
-                                </option>
-                            </select>
-                            <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
+                            <label for="owner_autocomplete_edit" class="block text-sm font-medium">Current Owner</label>
+                            <OwnerAutocomplete
+                                input-id="owner_autocomplete_edit"
+                                v-model="ownerSearchValue"
+                                :error-message="form.errors.owner_id"
+                                @owner-selected="handleOwnerSelected"
+                            />
                         </div>
 
                         <div>
@@ -91,9 +90,12 @@
 
 <script setup lang="ts">
 import AppLayout from '@/layouts/AppLayout.vue';
+import OwnerAutocomplete from '@/components/OwnerAutocomplete.vue';
 import { AssetCreateUpdatePayload, EditAssetProps, Owner } from '@/types/model';
 import { Head, router, useForm } from '@inertiajs/vue3';
+import { ref, onMounted } from 'vue';
 import { Edit, Save } from 'lucide-vue-next';
+import axios from 'axios';
 
 const componentProperties = defineProps<EditAssetProps>();
 
@@ -104,6 +106,9 @@ const form = useForm<AssetCreateUpdatePayload>({
     owner_id: componentProperties.asset.current_owner_id,
     owned_from: convertIsoToDatetimeLocal(componentProperties.asset.current_owned_from),
 });
+
+const ownerSearchValue = ref('');
+const selectedOwner = ref<{ id: number; name: string } | null>(null);
 
 function getOwnerFullName(owner: Owner): string {
     return `${owner.first_name} ${owner.last_name}`;
@@ -125,10 +130,43 @@ function convertIsoToDatetimeLocal(iso: string | null): string | null {
     return `${y}-${m}-${d}T${h}:${i}`;
 }
 
-function submitUpdateAsset(): void {
-    router.put(route('assets.update', componentProperties.asset.id), form.data(), {
-        preserveScroll: true,
-        onError: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
-    });
+function handleOwnerSelected(owner: { id: number; name: string } | null) {
+    selectedOwner.value = owner;
+    
+    if (owner && owner.id !== -1) {
+        form.owner_id = owner.id;
+    } else {
+        form.owner_id = null;
+    }
 }
+
+async function submitUpdateAsset(): Promise<void> {
+    try {
+        if (selectedOwner.value && selectedOwner.value.id === -1) {
+            const response = await axios.post('/api/owners/find-or-create', {
+                name: selectedOwner.value.name
+            });
+            
+            form.owner_id = response.data.id;
+        }
+        
+        router.put(route('assets.update', componentProperties.asset.id), form.data(), {
+            preserveScroll: true,
+            onError: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
+        });
+    } catch (error) {
+        console.error('Error creating owner:', error);
+    }
+}
+
+onMounted(() => {
+    const currentOwner = componentProperties.owners.find(owner => owner.id === componentProperties.asset.current_owner_id);
+    if (currentOwner) {
+        ownerSearchValue.value = getOwnerFullName(currentOwner);
+        selectedOwner.value = {
+            id: currentOwner.id,
+            name: getOwnerFullName(currentOwner)
+        };
+    }
+});
 </script>

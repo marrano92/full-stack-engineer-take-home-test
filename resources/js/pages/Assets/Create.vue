@@ -10,7 +10,13 @@
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
                             <label for="reference" class="block text-sm font-medium">Reference *</label>
-                            <input id="reference" type="text" v-model="form.reference" class="mt-1 w-full rounded border px-3 py-2" autocomplete="off" />
+                            <input
+                                id="reference"
+                                type="text"
+                                v-model="form.reference"
+                                class="mt-1 w-full rounded border px-3 py-2"
+                                autocomplete="off"
+                            />
                             <p v-if="form.errors.reference" class="mt-1 text-sm text-red-600">{{ form.errors.reference }}</p>
                         </div>
 
@@ -30,14 +36,13 @@
                     <!-- Second row: Current Owner and Owned From -->
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div>
-                            <label for="owner_id" class="block text-sm font-medium">Current Owner</label>
-                            <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
-                                <option :value="null">— Nessun owner —</option>
-                                <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
-                                    {{ getOwnerFullName(owner) }}
-                                </option>
-                            </select>
-                            <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
+                            <label for="owner_autocomplete" class="block text-sm font-medium">Current Owner</label>
+                            <OwnerAutocomplete
+                                input-id="owner_autocomplete"
+                                v-model="ownerSearchValue"
+                                :error-message="form.errors.owner_id"
+                                @owner-selected="handleOwnerSelected"
+                            />
                         </div>
 
                         <div>
@@ -55,28 +60,24 @@
                         <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
                     </div>
 
-                <div class="flex items-center gap-3">
-                    <button type="submit" class="btn-primary" :disabled="form.processing">
-                        Create Asset
-                    </button>
+                    <div class="flex items-center gap-3">
+                        <button type="submit" class="btn-primary" :disabled="form.processing">Create Asset</button>
 
-                    <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Annulla</button>
-                </div>
-            </form>
+                        <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Annulla</button>
+                    </div>
+                </form>
             </div>
         </div>
     </AppLayout>
 </template>
 
 <script setup lang="ts">
+import OwnerAutocomplete from '@/components/OwnerAutocomplete.vue';
 import AppLayout from '@/layouts/AppLayout.vue';
-import { AssetCreateUpdatePayload, Owner } from '@/types/model';
+import { AssetCreateUpdatePayload } from '@/types/model';
 import { Head, router, useForm } from '@inertiajs/vue3';
-
-interface CreateAssetProps {
-    owners: Owner[];
-}
-const componentProperties = defineProps<CreateAssetProps>();
+import axios from 'axios';
+import { ref } from 'vue';
 
 const form = useForm<AssetCreateUpdatePayload>({
     reference: '',
@@ -86,11 +87,31 @@ const form = useForm<AssetCreateUpdatePayload>({
     owned_from: null,
 });
 
-function getOwnerFullName(owner: Owner): string {
-    return `${owner.first_name} ${owner.last_name}`;
+const ownerSearchValue = ref('');
+const selectedOwner = ref<{ id: number; name: string } | null>(null);
+function handleOwnerSelected(owner: { id: number; name: string } | null) {
+    selectedOwner.value = owner;
+
+    if (owner && owner.id !== -1) {
+        form.owner_id = owner.id;
+    } else {
+        form.owner_id = null;
+    }
 }
 
-function submitCreateAsset(): void {
-    form.post(route('assets.store'));
+async function submitCreateAsset(): Promise<void> {
+    try {
+        if (selectedOwner.value && selectedOwner.value.id === -1) {
+            const response = await axios.post('/api/owners/find-or-create', {
+                name: selectedOwner.value.name,
+            });
+
+            form.owner_id = response.data.id;
+        }
+
+        form.post(route('assets.store'));
+    } catch (error) {
+        console.error('Error creating owner:', error);
+    }
 }
 </script>
