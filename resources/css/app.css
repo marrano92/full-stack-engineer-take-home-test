@@ -214,4 +214,10 @@
         width: 100% !important;
         height: auto !important;
     }
+
+    .svg-compact {
+        width: 80% !important;
+        margin-left: 4px;
+        height: auto !important;
+    }
 }
