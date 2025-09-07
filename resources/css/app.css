@@ -82,8 +82,7 @@
 @layer utilities {
     body,
     html {
-        --font-sans:
-            'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+        --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     }
 }
 
@@ -113,12 +112,12 @@
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
     --radius: 0.5rem;
-    --sidebar-background: hsl(0 0% 98%);
-    --sidebar-foreground: hsl(240 5.3% 26.1%);
-    --sidebar-primary: hsl(0 0% 10%);
-    --sidebar-primary-foreground: hsl(0 0% 98%);
-    --sidebar-accent: hsl(0 0% 94%);
-    --sidebar-accent-foreground: hsl(0 0% 30%);
+    --sidebar-background: hsl(225 74% 17%);
+    --sidebar-foreground: hsl(0 0% 98%);
+    --sidebar-primary: hsl(0 0% 98%);
+    --sidebar-primary-foreground: hsl(225 74% 17%);
+    --sidebar-accent: hsl(225 74% 25%);
+    --sidebar-accent-foreground: hsl(0 0% 98%);
     --sidebar-border: hsl(0 0% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(0 0% 98%);
@@ -152,16 +151,16 @@
     --chart-3: hsl(30 80% 55%);
     --chart-4: hsl(280 65% 60%);
     --chart-5: hsl(340 75% 55%);
-    --sidebar-background: hsl(0 0% 7%);
-    --sidebar-foreground: hsl(0 0% 95.9%);
-    --sidebar-primary: hsl(360, 100%, 100%);
-    --sidebar-primary-foreground: hsl(0 0% 100%);
-    --sidebar-accent: hsl(0 0% 15.9%);
-    --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+    --sidebar-background: hsl(225 74% 17%);
+    --sidebar-foreground: hsl(0 0% 98%);
+    --sidebar-primary: hsl(0 0% 98%);
+    --sidebar-primary-foreground: hsl(225 74% 17%);
+    --sidebar-accent: hsl(225 74% 25%);
+    --sidebar-accent-foreground: hsl(0 0% 98%);
     --sidebar-border: hsl(0 0% 15.9%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
     --sidebar: hsl(240 5.9% 10%);
-    --label: hsl(225 15% 63%);
+    --label: hsl(223, 17%, 67%);
     --input-bg: hsl(240 50% 98%);
     --input-border: hsl(230 20% 87%);
 }
@@ -170,7 +169,49 @@
     * {
         @apply border-border outline-ring/50;
     }
+
     body {
         @apply bg-background text-foreground;
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply bg-secondary uppercase text-secondary-foreground hover:bg-secondary/90 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    .btn-secondary {
+        @apply bg-gray-200 uppercase text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    .btn-destructive {
+        @apply bg-destructive uppercase text-destructive-foreground hover:bg-destructive/90 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    .btn-outline {
+        @apply border border-border bg-background hover:bg-accent hover:text-accent-foreground rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    }
+
+    h2 {
+        @apply text-sm font-semibold uppercase mb-3 tracking-wide;
+    }
+
+    table {
+        @apply bg-white;
+    }
+
+    table th {
+        @apply text-xs uppercase text-label;
+        padding-top: 1.5rem !important;
+        padding-bottom: 0.5rem !important;
+    }
+
+    tr {
+        @apply bg-white;
+    }
+
+    .svg-full-width {
+        width: 100% !important;
+        height: auto !important;
     }
 }

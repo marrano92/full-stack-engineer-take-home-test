@@ -1,82 +1,85 @@
 <template>
     <Head title="Assets - Edit" />
     <AppLayout>
-        <div class="mx-auto max-w-5xl space-y-8 p-6">
-            <h1 class="text-2xl font-semibold">Modifica asset</h1>
+        <div class="mx-auto w-full max-w-4xl space-y-8 p-6">
+            <h1 class="flex items-center gap-2 text-2xl font-semibold">
+                <Edit class="h-6 w-6" />
+                Modify asset
+            </h1>
+            <div class="max-w-6xl rounded-lg bg-white p-6 shadow-sm">
+                <form @submit.prevent="submitUpdateAsset" class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="reference" class="block text-sm font-medium">Reference *</label>
+                            <input id="reference" type="text" v-model="form.reference" class="mt-1 w-full rounded border px-3 py-2" />
+                            <p v-if="form.errors.reference" class="mt-1 text-sm text-red-600">{{ form.errors.reference }}</p>
+                        </div>
 
-            <form @submit.prevent="submitUpdateAsset" class="max-w-3xl space-y-4">
-                <!-- Reference -->
-                <div>
-                    <label for="reference" class="block text-sm font-medium">Reference *</label>
-                    <input id="reference" type="text" v-model="form.reference" class="mt-1 w-full rounded border px-3 py-2" />
-                    <p v-if="form.errors.reference" class="mt-1 text-sm text-red-600">{{ form.errors.reference }}</p>
-                </div>
+                        <div>
+                            <label for="serial_number" class="block text-sm font-medium">Serial Number *</label>
+                            <input id="serial_number" type="text" v-model="form.serial_number" class="mt-1 w-full rounded border px-3 py-2" />
+                            <p v-if="form.errors.serial_number" class="mt-1 text-sm text-red-600">{{ form.errors.serial_number }}</p>
+                        </div>
+                    </div>
 
-                <!-- Serial Number -->
-                <div>
-                    <label for="serial_number" class="block text-sm font-medium">Serial Number *</label>
-                    <input id="serial_number" type="text" v-model="form.serial_number" class="mt-1 w-full rounded border px-3 py-2" />
-                    <p v-if="form.errors.serial_number" class="mt-1 text-sm text-red-600">{{ form.errors.serial_number }}</p>
-                </div>
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="owner_id" class="block text-sm font-medium">Current Owner</label>
+                            <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
+                                <option :value="null">— Any owner —</option>
+                                <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
+                                    {{ getOwnerFullName(owner) }}
+                                </option>
+                            </select>
+                            <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
+                        </div>
 
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium">Description</label>
-                    <textarea id="description" v-model="form.description" rows="4" class="mt-1 w-full rounded border px-3 py-2" />
-                    <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
-                </div>
-
-                <!-- Owned By -->
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div>
-                        <label for="owner_id" class="block text-sm font-medium">Owned By</label>
-                        <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
-                            <option :value="null">— Nessun owner —</option>
-                            <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
-                                {{ getOwnerFullName(owner) }}
-                            </option>
-                        </select>
-                        <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
+                        <div>
+                            <label for="owned_from" class="block text-sm font-medium">Owned From</label>
+                            <input id="owned_from" type="datetime-local" v-model="form.owned_from" class="mt-1 w-full rounded border px-3 py-2" />
+                            <p v-if="form.errors.owned_from" class="mt-1 text-sm text-red-600">{{ form.errors.owned_from }}</p>
+                        </div>
                     </div>
 
                     <div>
-                        <label for="owned_from" class="block text-sm font-medium">Owned From</label>
-                        <input id="owned_from" type="datetime-local" v-model="form.owned_from" class="mt-1 w-full rounded border px-3 py-2" />
-                        <p v-if="form.errors.owned_from" class="mt-1 text-sm text-red-600">{{ form.errors.owned_from }}</p>
+                        <label for="description" class="block text-sm font-medium">Description</label>
+                        <textarea id="description" v-model="form.description" rows="4" class="mt-1 w-full rounded border px-3 py-2" />
+                        <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
                     </div>
-                </div>
 
-                <div class="flex items-center gap-3">
-                    <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50" :disabled="form.processing">
-                        Salva modifiche
-                    </button>
+                    <div class="flex items-center justify-between">
+                        <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">CANCEL</button>
 
-                    <button type="button" class="rounded border px-4 py-2" @click="router.visit(route('assets.index'))">Torna alla lista</button>
-                </div>
-            </form>
+                        <button type="submit" class="btn-primary flex items-center gap-2" :disabled="form.processing">
+                            <Save class="h-4 w-4" />
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-            <!-- History -->
             <section>
-                <h2 class="mb-3 text-xl font-semibold">Owner history</h2>
+                <h2>Previous Owners</h2>
+                <hr class="mb-4 border-t border-gray-300" />
                 <div class="overflow-x-auto rounded border">
                     <table class="min-w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-3 py-2 text-left">Owner</th>
+                                <th class="px-3 py-2 text-left w-2/5">Owner</th>
                                 <th class="px-3 py-2 text-left">Owned From</th>
-                                <th class="px-3 py-2 text-left">Owned To</th>
+                                <th class="px-3 py-2 text-left">Owned Till</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="entry in componentProperties.history.data" :key="entry.id" class="border-t">
-                                <td class="px-3 py-2">
+                                <td class="px-3 py-2 w-2/5">
                                     {{ entry.owner ? getOwnerFullName(entry.owner) : '—' }}
                                 </td>
                                 <td class="px-3 py-2">{{ formatDateTimeForDisplay(entry.owned_from) }}</td>
-                                <td class="px-3 py-2">{{ entry.owned_to ? formatDateTimeForDisplay(entry.owned_to) : 'In corso' }}</td>
+                                <td class="px-3 py-2">{{ entry.owned_to ? formatDateTimeForDisplay(entry.owned_to) : 'In charge' }}</td>
                             </tr>
                             <tr v-if="!componentProperties.history.data?.length">
-                                <td colspan="3" class="px-3 py-6 text-center text-gray-500">Nessuna history disponibile</td>
+                                <td colspan="3" class="px-3 py-6 text-center text-gray-500">Any history available</td>
                             </tr>
                         </tbody>
                     </table>
@@ -90,6 +93,7 @@
 import AppLayout from '@/layouts/AppLayout.vue';
 import { AssetCreateUpdatePayload, EditAssetProps, Owner } from '@/types/model';
 import { Head, router, useForm } from '@inertiajs/vue3';
+import { Edit, Save } from 'lucide-vue-next';
 
 const componentProperties = defineProps<EditAssetProps>();
 

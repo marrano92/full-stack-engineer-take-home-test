@@ -24,14 +24,14 @@
                             <td class="px-3 py-2">{{ formatDateTimeForDisplay(asset.current_owned_from) }}</td>
                             <td class="space-x-2 px-3 py-2 text-right">
                                 <button
-                                    class="rounded bg-gray-200 px-2 py-1"
+                                    class="btn-secondary px-2 py-1"
                                     @click="router.visit(route('assets.edit', asset.id))"
                                     aria-label="Modifica asset"
                                 >
                                     Modify
                                 </button>
                                 <button
-                                    class="rounded bg-red-600 px-2 py-1 text-white"
+                                    class="btn-destructive px-2 py-1"
                                     @click="deleteAssetByIdentifier(asset.id)"
                                     aria-label="Elimina asset"
                                 >
@@ -61,7 +61,7 @@
                 />
             </div>
             <div class="flex items-center justify-end">
-                <button class="rounded bg-blue-600 px-3 py-2 text-white" @click="router.visit(route('assets.create'))" aria-label="Crea nuovo asset">
+                <button class="btn-primary px-3 py-2" @click="router.visit(route('assets.create'))" aria-label="Crea nuovo asset">
                     Add new asset
                 </button>
             </div>

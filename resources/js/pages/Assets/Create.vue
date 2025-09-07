@@ -1,65 +1,69 @@
 <template>
     <Head title="Assets - Create" />
     <AppLayout>
-        <div class="mx-auto max-w-3xl space-y-6 p-6">
+        <div class="mx-auto max-w-6xl space-y-6 p-6">
             <h1 class="text-2xl font-semibold">Create new asset</h1>
 
-            <form @submit.prevent="submitCreateAsset" class="space-y-4">
-                <!-- Reference -->
-                <div>
-                    <label for="reference" class="block text-sm font-medium">Reference *</label>
-                    <input id="reference" type="text" v-model="form.reference" class="mt-1 w-full rounded border px-3 py-2" autocomplete="off" />
-                    <p v-if="form.errors.reference" class="mt-1 text-sm text-red-600">{{ form.errors.reference }}</p>
-                </div>
+            <div class="rounded-lg bg-white p-6 shadow-sm">
+                <form @submit.prevent="submitCreateAsset" class="space-y-4">
+                    <!-- First row: Reference and Serial Number -->
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="reference" class="block text-sm font-medium">Reference *</label>
+                            <input id="reference" type="text" v-model="form.reference" class="mt-1 w-full rounded border px-3 py-2" autocomplete="off" />
+                            <p v-if="form.errors.reference" class="mt-1 text-sm text-red-600">{{ form.errors.reference }}</p>
+                        </div>
 
-                <!-- Serial Number -->
-                <div>
-                    <label for="serial_number" class="block text-sm font-medium">Serial Number *</label>
-                    <input
-                        id="serial_number"
-                        type="text"
-                        v-model="form.serial_number"
-                        class="mt-1 w-full rounded border px-3 py-2"
-                        autocomplete="off"
-                    />
-                    <p v-if="form.errors.serial_number" class="mt-1 text-sm text-red-600">{{ form.errors.serial_number }}</p>
-                </div>
+                        <div>
+                            <label for="serial_number" class="block text-sm font-medium">Serial Number *</label>
+                            <input
+                                id="serial_number"
+                                type="text"
+                                v-model="form.serial_number"
+                                class="mt-1 w-full rounded border px-3 py-2"
+                                autocomplete="off"
+                            />
+                            <p v-if="form.errors.serial_number" class="mt-1 text-sm text-red-600">{{ form.errors.serial_number }}</p>
+                        </div>
+                    </div>
 
-                <!-- Description -->
-                <div>
-                    <label for="description" class="block text-sm font-medium">Description</label>
-                    <textarea id="description" v-model="form.description" rows="4" class="mt-1 w-full rounded border px-3 py-2" />
-                    <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
-                </div>
+                    <!-- Second row: Current Owner and Owned From -->
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <label for="owner_id" class="block text-sm font-medium">Current Owner</label>
+                            <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
+                                <option :value="null">— Nessun owner —</option>
+                                <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
+                                    {{ getOwnerFullName(owner) }}
+                                </option>
+                            </select>
+                            <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
+                        </div>
 
-                <!-- Owned By (Owner) -->
-                <div>
-                    <label for="owner_id" class="block text-sm font-medium">Owned By</label>
-                    <select id="owner_id" v-model="form.owner_id" class="mt-1 w-full rounded border px-3 py-2">
-                        <option :value="null">— Nessun owner —</option>
-                        <option v-for="owner in componentProperties.owners" :key="owner.id" :value="owner.id">
-                            {{ getOwnerFullName(owner) }}
-                        </option>
-                    </select>
-                    <p v-if="form.errors.owner_id" class="mt-1 text-sm text-red-600">{{ form.errors.owner_id }}</p>
-                </div>
+                        <div>
+                            <label for="owned_from" class="block text-sm font-medium">Owned From</label>
+                            <input id="owned_from" type="datetime-local" v-model="form.owned_from" class="mt-1 w-full rounded border px-3 py-2" />
+                            <p class="mt-1 text-xs text-gray-500">Se selezioni un owner e non imposti la data, verrà usata l'ora corrente.</p>
+                            <p v-if="form.errors.owned_from" class="mt-1 text-sm text-red-600">{{ form.errors.owned_from }}</p>
+                        </div>
+                    </div>
 
-                <!-- Owned From -->
-                <div>
-                    <label for="owned_from" class="block text-sm font-medium">Owned From (opzionale)</label>
-                    <input id="owned_from" type="datetime-local" v-model="form.owned_from" class="mt-1 w-full rounded border px-3 py-2" />
-                    <p class="mt-1 text-xs text-gray-500">Se selezioni un owner e non imposti la data, verrà usata l’ora corrente.</p>
-                    <p v-if="form.errors.owned_from" class="mt-1 text-sm text-red-600">{{ form.errors.owned_from }}</p>
-                </div>
+                    <!-- Third row: Description (full width) -->
+                    <div>
+                        <label for="description" class="block text-sm font-medium">Description</label>
+                        <textarea id="description" v-model="form.description" rows="4" class="mt-1 w-full rounded border px-3 py-2" />
+                        <p v-if="form.errors.description" class="mt-1 text-sm text-red-600">{{ form.errors.description }}</p>
+                    </div>
 
                 <div class="flex items-center gap-3">
-                    <button type="submit" class="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50" :disabled="form.processing">
+                    <button type="submit" class="btn-primary" :disabled="form.processing">
                         Create Asset
                     </button>
 
-                    <button type="button" class="rounded border px-4 py-2" @click="router.visit(route('assets.index'))">Annulla</button>
+                    <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Annulla</button>
                 </div>
             </form>
+            </div>
         </div>
     </AppLayout>
 </template>
