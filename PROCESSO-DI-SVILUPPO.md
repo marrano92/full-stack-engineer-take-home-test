@@ -90,3 +90,10 @@ Stack: Laravel 12, Vue 3 + Inertia, Tailwind, Postgres, Docker.
 - Mailer di default su `log` (README spiega come usare SMTP/Resend).
 
 ---
+
+## Parti in cui ho usato l'aiuto di Claude Code
+
+- Supporto nella scrittura degli unit test
+- Supporto nella scrittura dei vari file md
+- Supporto nella scrittura dei componenti di FE (sotto supervisione ovviamente)
+- Analisi finale sulla code base per ricevere feeedback sulle scelte prese (a mo di seconda opinione)
