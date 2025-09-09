@@ -39,7 +39,7 @@ class AssetController extends Controller
 
         $actionAssignOwnerToAsset($asset, $owner, $assignmentDate, auth()->id());
 
-        return redirect()->route('assets.index')->with('success', 'Asset creato');
+        return redirect()->route('assets.index')->with('success', 'Asset created successfully.');
     }
 
     public function update(
@@ -59,7 +59,7 @@ class AssetController extends Controller
 
         $actionAssignOwnerToAsset($asset, $owner, $assignmentDate, auth()->id());
 
-        return redirect()->route('assets.index')->with('success', 'Asset aggiornato!');
+        return redirect()->route('assets.index')->with('success', 'Asset updated!');
     }
 
     public function pageNew(): Response
@@ -88,6 +88,6 @@ class AssetController extends Controller
     {
         $asset->delete();
 
-        return redirect()->route('assets.index')->with('success', 'Asset eliminato con successo');
+        return redirect()->route('assets.index')->with('success', 'Asset deleted successfully');
     }
 }
