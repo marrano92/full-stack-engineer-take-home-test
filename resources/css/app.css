@@ -93,7 +93,7 @@
     --card-foreground: hsl(0 0% 3.9%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0 0% 3.9%);
-    --primary: hsl(0 0% 9%);
+    --primary: hsl(225 74% 17%);
     --primary-foreground: hsl(0 0% 98%);
     --secondary: hsl(225 74% 17%);
     --secondary-foreground: hsl(0 0% 98%);
@@ -176,11 +176,11 @@
 }
 
 @layer components {
-    .btn-primary {
+    .btn-main {
         @apply bg-secondary uppercase text-secondary-foreground hover:bg-secondary/90 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
     }
 
-    .btn-secondary {
+    .btn-second {
         @apply bg-gray-200 uppercase text-gray-900 hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-100 dark:hover:bg-gray-600 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
     }
 
@@ -195,6 +195,10 @@
     .btn-action {
         @apply uppercase text-black hover:opacity-90 rounded-md px-4 py-2 font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
         background-color: #fbd501;
+    }
+
+    button {
+        cursor: pointer;
     }
 
     h2 {

@@ -40,9 +40,9 @@
                     />
                     <InputError :message="form.errors.password" />
                 </div>
-                <Button type="submit" class="btn-primary mt-4 w-full" style="height: 49px" :tabindex="4" :disabled="form.processing">
+                <Button type="submit" class="btn-main mt-4 w-full" style="height: 49px" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    LOGIN
+                    NEXT STEP
                 </Button>
             </div>
         </form>

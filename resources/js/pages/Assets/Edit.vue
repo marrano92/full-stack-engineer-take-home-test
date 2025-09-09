@@ -49,7 +49,7 @@
                     <div class="flex items-center justify-between">
                         <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">CANCEL</button>
 
-                        <button type="submit" class="btn-primary flex items-center gap-2" :disabled="form.processing">
+                        <button type="submit" class="btn-main flex items-center gap-2" :disabled="form.processing">
                             <Save class="h-4 w-4" />
                             Save Changes
                         </button>
@@ -64,14 +64,14 @@
                     <table class="min-w-full text-sm">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-3 py-2 text-left w-2/5">Owner</th>
+                                <th class="w-2/5 px-3 py-2 text-left">Owner</th>
                                 <th class="px-3 py-2 text-left">Owned From</th>
                                 <th class="px-3 py-2 text-left">Owned Till</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="entry in componentProperties.history.data" :key="entry.id" class="border-t">
-                                <td class="px-3 py-2 w-2/5">
+                                <td class="w-2/5 px-3 py-2">
                                     {{ entry.owner ? getOwnerFullName(entry.owner) : '—' }}
                                 </td>
                                 <td class="px-3 py-2">{{ formatDateTimeForDisplay(entry.owned_from) }}</td>
@@ -89,13 +89,13 @@
 </template>
 
 <script setup lang="ts">
-import AppLayout from '@/layouts/AppLayout.vue';
 import OwnerAutocomplete from '@/components/OwnerAutocomplete.vue';
+import AppLayout from '@/layouts/AppLayout.vue';
 import { AssetCreateUpdatePayload, EditAssetProps, Owner } from '@/types/model';
 import { Head, router, useForm } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
-import { Edit, Save } from 'lucide-vue-next';
 import axios from 'axios';
+import { Edit, Save } from 'lucide-vue-next';
+import { onMounted, ref } from 'vue';
 
 const componentProperties = defineProps<EditAssetProps>();
 
@@ -132,7 +132,7 @@ function convertIsoToDatetimeLocal(iso: string | null): string | null {
 
 function handleOwnerSelected(owner: { id: number; name: string } | null) {
     selectedOwner.value = owner;
-    
+
     if (owner && owner.id !== -1) {
         form.owner_id = owner.id;
     } else {
@@ -144,12 +144,12 @@ async function submitUpdateAsset(): Promise<void> {
     try {
         if (selectedOwner.value && selectedOwner.value.id === -1) {
             const response = await axios.post('/api/owners/find-or-create', {
-                name: selectedOwner.value.name
+                name: selectedOwner.value.name,
             });
-            
+
             form.owner_id = response.data.id;
         }
-        
+
         form.put(route('assets.update', componentProperties.asset.id), {
             preserveScroll: true,
             onError: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
@@ -160,12 +160,12 @@ async function submitUpdateAsset(): Promise<void> {
 }
 
 onMounted(() => {
-    const currentOwner = componentProperties.owners.find(owner => owner.id === componentProperties.asset.current_owner_id);
+    const currentOwner = componentProperties.owners.find((owner) => owner.id === componentProperties.asset.current_owner_id);
     if (currentOwner) {
         ownerSearchValue.value = getOwnerFullName(currentOwner);
         selectedOwner.value = {
             id: currentOwner.id,
-            name: getOwnerFullName(currentOwner)
+            name: getOwnerFullName(currentOwner),
         };
     }
 });

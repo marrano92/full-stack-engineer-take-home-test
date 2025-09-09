@@ -1,66 +1,74 @@
 services:
-  setup-env:
-    build:
-      context: .
-      dockerfile: infra/prod/docker/Dockerfile
-    image: skillsherpa-full-stack-take-home-test:latest
-    volumes:
-      - .:/workspace
-    working_dir: /workspace
-    command: sh -c "chmod +x setup-env.sh && sh setup-env.sh production"
+    setup-env:
+        build:
+            context: .
+            dockerfile: infra/prod/docker/Dockerfile
+        image: skillsherpa-full-stack-take-home-test:latest
+        volumes:
+            - .:/workspace
+        working_dir: /workspace
+        command: sh -c "chmod +x setup-env.sh && sh setup-env.sh production"
 
-  migrations:
-    build:
-      context: .
-      dockerfile: infra/prod/docker/Dockerfile
-    image: skillsherpa-full-stack-take-home-test:latest
-    volumes:
-      - ./.env:/var/www/.env:ro
-    command:
-      - bash
-      - -c
-      - chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh && /var/www/infra/prod/docker/db-migrations.sh
-    depends_on:
-      setup-env:
-        condition: service_completed_successfully
-      db:
-        condition: service_healthy
+    migrations:
+        build:
+            context: .
+            dockerfile: infra/prod/docker/Dockerfile
+        image: skillsherpa-full-stack-take-home-test:latest
+        volumes:
+            - ./.env:/var/www/.env:ro
+        command:
+            - bash
+            - -c
+            - chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh && /var/www/infra/prod/docker/db-migrations.sh
+        depends_on:
+            setup-env:
+                condition: service_completed_successfully
+            db:
+                condition: service_healthy
 
-  app:
-    build:
-      context: .
-      dockerfile: infra/prod/docker/Dockerfile
-    image: skillsherpa-full-stack-take-home-test:latest
-    command:
-      - bash
-      - -c
-      - chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh && /var/www/infra/prod/docker/docker-entrypoint.sh
-    restart: unless-stopped
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./.env:/var/www/.env:ro
-    depends_on:
-      db:
-        condition: service_healthy
-      migrations:
-        condition: service_started
+    app:
+        build:
+            context: .
+            dockerfile: infra/prod/docker/Dockerfile
+        image: skillsherpa-full-stack-take-home-test:latest
+        command:
+            - bash
+            - -c
+            - chmod +x /var/www/infra/prod/docker/docker-entrypoint.sh && /var/www/infra/prod/docker/docker-entrypoint.sh
+        restart: unless-stopped
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./.env:/var/www/.env:ro
+        depends_on:
+            db:
+                condition: service_healthy
+            migrations:
+                condition: service_started
 
-  db:
-    image: postgres:16
-    environment:
-      POSTGRES_DB: laravel
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
-    volumes:
-      - dbdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    db:
+        image: postgres:16
+        environment:
+            POSTGRES_DB: laravel
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - "5432:5432"
+        volumes:
+            - dbdata:/var/lib/postgresql/data
+        healthcheck:
+            test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+
+    mailhog:
+        image: mailhog/mailhog:latest
+        platform: linux/amd64
+        ports:
+            - "1025:1025"
+            - "8025:8025"
+        restart: unless-stopped
 
 volumes:
-  dbdata:
+    dbdata:

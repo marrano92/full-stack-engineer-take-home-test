@@ -2,8 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Asset;
-use App\Models\Owner;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +18,7 @@ class AssetFactory extends Factory
     {
         $products = [
             'MacBook Pro 13"',
-            'MacBook Pro 14"', 
+            'MacBook Pro 14"',
             'MacBook Pro 15"',
             'MacBook Pro 16"',
             'MacBook Air 13"',
@@ -52,12 +50,12 @@ class AssetFactory extends Factory
         ];
 
         $serialPrefixes = ['AA', 'AB', 'CC', 'DD', 'EE', 'FF'];
-        
+
         return [
-            'reference' => fake()->randomElement($products),
-            'serial_number' => fake()->randomElement($serialPrefixes) . fake()->numerify('######'),
-            'description' => fake()->realText(fake()->numberBetween(50, 150)),
-            'current_owner_id' => null, // Will be set by seeder
+            'reference'          => fake()->randomElement($products),
+            'serial_number'      => fake()->randomElement($serialPrefixes).fake()->numerify('######'),
+            'description'        => fake()->realText(fake()->numberBetween(50, 150)),
+            'current_owner_id'   => null,
             'current_owned_from' => fake()->dateTimeBetween('-2 years', 'now'),
         ];
     }

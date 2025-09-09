@@ -61,7 +61,7 @@
                     </div>
 
                     <div class="flex items-center gap-3">
-                        <button type="submit" class="btn-primary" :disabled="form.processing">Create Asset</button>
+                        <button type="submit" class="btn-main" :disabled="form.processing">Create Asset</button>
 
                         <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Cancel</button>
                     </div>
