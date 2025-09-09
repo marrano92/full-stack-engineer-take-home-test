@@ -99,6 +99,9 @@ exposes **port 3000**.
 docker compose up --build
 # App will be available at:
 # http://localhost:3000/
+
+# !!! Remember to run migration seed after running up the env, 
+# otherwise won't have data for login
 ```
 
 **Notes**
