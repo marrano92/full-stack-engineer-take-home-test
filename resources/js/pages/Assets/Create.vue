@@ -48,7 +48,7 @@
                         <div>
                             <label for="owned_from" class="block text-sm font-medium">Owned From</label>
                             <input id="owned_from" type="datetime-local" v-model="form.owned_from" class="mt-1 w-full rounded border px-3 py-2" />
-                            <p class="mt-1 text-xs text-gray-500">Se selezioni un owner e non imposti la data, verrà usata l'ora corrente.</p>
+                            <p class="mt-1 text-xs text-gray-500">If you select an owner and don't set the date, the current time will be used.</p>
                             <p v-if="form.errors.owned_from" class="mt-1 text-sm text-red-600">{{ form.errors.owned_from }}</p>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                     <div class="flex items-center gap-3">
                         <button type="submit" class="btn-primary" :disabled="form.processing">Create Asset</button>
 
-                        <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Annulla</button>
+                        <button type="button" class="btn-outline" @click="router.visit(route('assets.index'))">Cancel</button>
                     </div>
                 </form>
             </div>

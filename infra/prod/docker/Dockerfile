@@ -59,6 +59,9 @@ RUN composer install --no-scripts --no-autoloader
 # Copy the rest of the application
 COPY .. .
 
+# Setup production environment
+RUN cp envs/.env.production .env
+
 # Final Laravel setup
 RUN composer dump-autoload --optimize
 RUN vite build
