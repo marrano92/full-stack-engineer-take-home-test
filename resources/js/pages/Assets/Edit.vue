@@ -150,7 +150,7 @@ async function submitUpdateAsset(): Promise<void> {
             form.owner_id = response.data.id;
         }
         
-        router.put(route('assets.update', componentProperties.asset.id), form.data(), {
+        form.put(route('assets.update', componentProperties.asset.id), {
             preserveScroll: true,
             onError: () => window.scrollTo({ top: 0, behavior: 'smooth' }),
         });

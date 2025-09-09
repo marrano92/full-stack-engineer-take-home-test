@@ -44,12 +44,35 @@ class ActionAssignOwnerToAsset
             $newId     = $newOwner->id;
 
             if ($currentId === $newId) {
-                return new AssignOwnerResultDTO(
-                    changed: false,
-                    asset: $asset->fresh('owner'),
-                    newAssignment: null,
-                    reason: 'no_change'
-                );
+                $currentOwnedFrom = $asset->current_owned_from ? $asset->current_owned_from : null;
+
+                if ($currentOwnedFrom && $currentOwnedFrom->equalTo($at)) {
+                    return new AssignOwnerResultDTO(
+                        changed: false,
+                        asset: $asset->fresh('owner'),
+                        newAssignment: null,
+                        reason: 'no_change'
+                    );
+                }
+
+                if ($currentOwnedFrom && ! $currentOwnedFrom->equalTo($at)) {
+                    $open = AssetOwnerAssignment::open()->forAsset($asset->id)->first();
+                    if ($open) {
+                        $open->owned_from = $at;
+                        $open->save();
+                    }
+
+                    $asset->forceFill([
+                        'current_owned_from' => $at,
+                    ])->save();
+
+                    return new AssignOwnerResultDTO(
+                        changed: true,
+                        asset: $asset->fresh('owner'),
+                        newAssignment: $open,
+                        reason: 'date_updated'
+                    );
+                }
             }
 
             $open = AssetOwnerAssignment::open()->forAsset($asset->id)->first();

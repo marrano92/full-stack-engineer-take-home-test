@@ -1,5 +1,5 @@
 <template>
-    <AuthBase title="Log in to your account" >
+    <AuthBase title="Log in to your account">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
@@ -9,7 +9,7 @@
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email" class="text-xs uppercase text-label">Email</Label>
+                    <Label for="email" class="text-xs text-label uppercase">Email</Label>
                     <Input
                         id="email"
                         type="email"
@@ -19,14 +19,14 @@
                         autocomplete="email"
                         v-model="form.email"
                         placeholder="Your Company Email"
-                        style="height: 49px;"
+                        style="height: 49px"
                     />
                     <InputError :message="form.errors.email" />
                 </div>
 
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
-                        <Label for="password" class="text-xs uppercase text-label">Password</Label>
+                        <Label for="password" class="text-xs text-label uppercase">Password</Label>
                     </div>
                     <Input
                         id="password"
@@ -36,13 +36,13 @@
                         autocomplete="current-password"
                         v-model="form.password"
                         placeholder="Enter your password"
-                        style="height: 49px;"
+                        style="height: 49px"
                     />
                     <InputError :message="form.errors.password" />
                 </div>
-                <Button type="submit" class="btn-primary mt-4 w-full" style="height: 49px;" :tabindex="4" :disabled="form.processing">
+                <Button type="submit" class="btn-primary mt-4 w-full" style="height: 49px" :tabindex="4" :disabled="form.processing">
                     <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
-                    NEXT STEP
+                    LOGIN
                 </Button>
             </div>
         </form>
